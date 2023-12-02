@@ -1,56 +1,48 @@
-import React, { useState, useEffect } from "react"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
-import { Form, Input, Button, message } from "antd"
-import { LockOutlined, UserOutlined } from "@ant-design/icons"
-
-import inventorySVG from "../assets/svgs/inventory.svg"
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Form, Input, Button, message } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'; 
+import inventorySVG from '../assets/svgs/inventory.svg';
 
 const Login = () => {
-  // states
-  const [loading, setLoading] = useState(false)
-  const [responseData, setResponseData] = useState(null)
+  const [loading, setLoading] = useState(false); 
+  const navigate = useNavigate();
+  const { setAuth } = useAuth(); // Use the useAuth hook
 
-    // router
-    const navigate = useNavigate()
-
-  const onFinish = async (values) => {
-    const { email, password } = values
-    setLoading(true)
-
+  const onLoginFinish = async (values) => {
+    setLoading(true);
+    const { email, password } = values;
     try {
       const response = await axios.post(
-        `https://akesseh.kirkgoc.com/api/auth.php/login`,
+        `http://localhost/akesseh/backend/api/auth.php/login`,
         {
           email: email,
           password: password,
         },
         {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         }
-      )
-      setResponseData(response.data)
-      localStorage.setItem("user_id", response.data.data.user_id)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+      );
 
-  useEffect(() => {
-    if (responseData) {
-      if (responseData.status === 200) {
-        message.success(responseData.message)
-        navigate("/admin")
+      if (response.data.status === 200) {
+        setLoading(false);
+        message.success(response.data.message);
+        setAuth(response.data); // Set authentication state
+        navigate('/admin/dashboard');
       } else {
-        message.error(responseData.message)
+        setLoading(false);
+        message.error(response.data.message);
       }
-      setLoading(false)
-      console.log(responseData)
+    } catch (error) {
+      console.log(error);
     }
-  }, [responseData])
-
+  };
+  
+  
   return (
     <div className="flex h-full flex-col lg:flex-row gap-4 bg-white dark:bg-gray-950">
       <div className="lg:w-1/2 h-max lg:h-[80%] flex lg:flex-col items-center justify-between lg:justify-center bg-blue-500 lg:bg-transparent gap-4 px-3">
@@ -70,7 +62,7 @@ const Login = () => {
         </h1>
         <Form
           layout="vertical"
-          onFinish={onFinish}
+          onFinish={onLoginFinish}
           autoComplete="off"
           initialValues={{
             remember: true,
@@ -95,6 +87,7 @@ const Login = () => {
                 message: "Please enter a valid email!",
               },
             ]}
+            hasFeedback
           >
             <Input
               size="large"
@@ -117,6 +110,7 @@ const Login = () => {
                 message: "Please input your password!",
               },
             ]}
+            hasFeedback
           >
             <Input.Password
               size="large"
