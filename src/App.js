@@ -1,52 +1,29 @@
-// import dependencies
-import React, { useEffect, useState } from "react"
-import { Routes, Route, Navigate } from "react-router-dom"
-import axios from "axios"
-
-// import pages and layouts
+// App.js
+import React from "react"
+import { Routes, Route } from "react-router-dom"
 import AdminLayout from "./layouts/AdminLayout"
 import Login from "./pages/Login"
+import Landing from "./pages/Landing"
+import ProtectedRoute from "./ProtectedRoute"
+import Error404 from "./pages/error/404"
+import Error403 from "./pages/error/403"
 
 function App() {
-  // states
-  const [auth, setAuth] = useState(null)
-
-  // check if user is logged in
-  useEffect(() => {
-    const fetchAuth = async () => {
-      try {
-        const response = await axios.get(
-          "https://akesseh.kirkgoc.com/api/auth.php/check-session",
-            { withCredentials: true }
-        )
-        setAuth(response.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    fetchAuth()
-
-    // periodically check every 5 minutes
-    const interval = setInterval(() => {
-      fetchAuth()
-    }, 300000)
-
-    return () => clearInterval(interval)
-  }, [])
-
   return (
-    <div className="h-screen bg-white dark:bg-gray-950 overflow-hidden">
+    <div className="h-screen bg-white dark:bg-slate-950 overflow-hidden">
       <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
         <Route
-          path="/"
-          exact
+          path="/admin/*"
           element={
-            auth ? <Navigate to="/admin" /> : <Navigate to="/login" />
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin/*" element={<AdminLayout />} />
+        <Route path="/error-403" element={<Error403 />} />
+        <Route path="*" element={<Error404 />} />
       </Routes>
     </div>
   )
