@@ -12,6 +12,7 @@ const getRoute = (label, key, icon, children, type) => {
 
 const sidebarRoutes = [
   getRoute("Dashboard", "/admin/dashboard", <UserOutlined />, null, "item"),
+  getRoute("Categories", "/admin/categories", <VideoCameraOutlined />, null, "item"),
   getRoute("Inventory", "/admin/inventory", <VideoCameraOutlined />, null, "item"),
   getRoute("Orders", "/admin/orders", <UploadOutlined />, null, "item"),
   getRoute("User Management", "/admin/user-management", <UserOutlined />, null, "item"),

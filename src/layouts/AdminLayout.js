@@ -15,6 +15,7 @@ import sidebarRotes from "../routes"
 
 // Import pages and layouts
 import UserManagement from "../pages/admin/UserManagement"
+import Categories from "../pages/admin/Categories"
 import Error404 from "../pages/error/404"
 
 const AdminLayout = () => {
@@ -54,6 +55,9 @@ const AdminLayout = () => {
     switch (path) {
       case "/akesseh/admin/dashboard":
         setHeaderText("Dashboard")
+        break
+      case "/akesseh/admin/categories":
+        setHeaderText("Product Categories")
         break
       case "/akesseh/admin/inventory":
         setHeaderText("Inventory")
@@ -172,6 +176,10 @@ const AdminLayout = () => {
               <Route
                 path="/dashboard"
                 element={<div className="dark:text-white">Dashboard</div>}
+              />
+              <Route 
+                path="/categories"
+                element={<Categories />}
               />
               <Route
                 path="/inventory"
