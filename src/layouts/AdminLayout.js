@@ -16,6 +16,8 @@ import sidebarRotes from "../routes"
 // Import pages and layouts
 import UserManagement from "../pages/admin/UserManagement"
 import Categories from "../pages/admin/Categories"
+import Inventory from "../pages/admin/Inventory"
+import SalesPoint from "../pages/admin/SalesPoint"
 import Error404 from "../pages/error/404"
 
 const AdminLayout = () => {
@@ -73,6 +75,9 @@ const AdminLayout = () => {
         break
       case "/akesseh/admin/settings":
         setHeaderText("Settings")
+        break
+      case "/akesseh/admin/sales-point":
+        setHeaderText("Sales Point")
         break
       default:
         setHeaderText("Dashboard")
@@ -183,12 +188,17 @@ const AdminLayout = () => {
               />
               <Route
                 path="/inventory"
-                element={<div className="dark:text-white">Inventory</div>}
+                element={<Inventory />}
+              />
+              <Route
+                path="/sales-point"
+                element={<SalesPoint />}
               />
               <Route
                 path="/orders"
                 element={<div className="dark:text-white">Orders</div>}
               />
+
               <Route path="/user-management" element={<UserManagement />} />
               <Route path="*" element={<Error404 />} />
             </Routes>
